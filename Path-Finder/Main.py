@@ -47,12 +47,24 @@ run = True
 findPath = False     
 while run:
     # pygame.time.delay(1)
+    
+    if findPath:
+        path = A_star.search(graph, start, end)
+        if path == None:
+            print("no path")
+            run = False
+        else:
+            for i in range(0,len(path)):
+                for j in range(0,len(path[i])):
+                    if path[i][j] != -1:
+                        node(i, j).changeColorToRed()
+        
         
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
             
-        if pygame.mouse.get_pressed()[0] :
+        if pygame.mouse.get_pressed()[0] & ( not findPath ) :
             try:
                 x,y = pygame.mouse.get_pos()
                 x1 = x // (500 // cols)
@@ -61,6 +73,9 @@ while run:
                 graph[x1][y1] = 1  
             except AttributeError:
                 pass
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
+                findPath = True
 
     pygame.display.update()
 
